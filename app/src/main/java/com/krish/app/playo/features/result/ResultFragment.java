@@ -42,13 +42,15 @@ public class ResultFragment extends BaseCallbackFragment<ResultViewModel, IHomeA
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mFragmentResultBinding = DataBindingUtil.inflate(
-                inflater, R.layout.fragment_result, container, false);
-        getAppComponent().inject(this);
-        initViewModel(ResultViewModel.class);
-        initActivityCallback(IHomeActivityCallback.class);
-        initRecycler();
-        observerResults();
+        if(mFragmentResultBinding==null){
+            mFragmentResultBinding = DataBindingUtil.inflate(
+                    inflater, R.layout.fragment_result, container, false);
+            getAppComponent().inject(this);
+            initViewModel(ResultViewModel.class);
+            initActivityCallback(IHomeActivityCallback.class);
+            initRecycler();
+            observerResults();
+        }
         return mFragmentResultBinding.getRoot();
     }
 
@@ -57,6 +59,7 @@ public class ResultFragment extends BaseCallbackFragment<ResultViewModel, IHomeA
         if(bundle!=null){
             String query = bundle.getString(ARG_QUERY);
             getViewModel().setQuery(query);
+            mFragmentResultBinding.textResults.setText(String.format("Showing results for: %s", query));
             getViewModel().getSearchResult(query,0).observe(getViewLifecycleOwner(), resultData -> {
                 if(resultData!=null){
                     List<Hit> hits = resultData.getHits();

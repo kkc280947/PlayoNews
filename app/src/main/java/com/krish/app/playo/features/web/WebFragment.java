@@ -60,6 +60,30 @@ public class WebFragment extends BaseFragment{
             fragmentWebBinding.webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
 
+        fragmentWebBinding.webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                fragmentWebBinding.progressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onPageCommitVisible(WebView view, String url) {
+                super.onPageCommitVisible(view, url);
+                fragmentWebBinding.progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                fragmentWebBinding.progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                return false;
+            }
+        });
         Bundle bundle = getArguments();
         if(bundle!=null){
             String url = bundle.getString(ARG_URL);

@@ -10,6 +10,8 @@ import com.krish.app.playo.features.home.interfaces.IHomeActivityCallback;
 import com.krish.app.playo.features.result.ResultFragment;
 import com.krish.app.playo.features.web.WebFragment;
 
+import static com.krish.app.playo.utils.Utilities.hideKeyboard;
+
 public class HomeActivity extends BaseActivity implements IHomeActivityCallback {
 
     @Override
@@ -29,12 +31,12 @@ public class HomeActivity extends BaseActivity implements IHomeActivityCallback 
 
     @Override
     public void moveToResults(String query) {
+        hideKeyboard(this);
         swapFragment(ResultFragment.newInstance(query), true, true);
     }
 
     @Override
     public void moveToWebPage(String url, String title) {
         swapFragment(WebFragment.newInstance(url,title), true, true);
-
     }
 }
