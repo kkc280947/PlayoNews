@@ -1,5 +1,6 @@
 package com.krish.app.playo.features.result;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,7 @@ import com.krish.app.playo.data.models.Hit;
 import com.krish.app.playo.databinding.FragmentResultBinding;
 import com.krish.app.playo.features.application.base.BaseCallbackFragment;
 import com.krish.app.playo.features.home.interfaces.IHomeActivityCallback;
-import com.krish.app.playo.features.web.EndlessRecyclerViewScrollListener;
+import com.krish.app.playo.utils.EndlessRecyclerViewScrollListener;
 import com.krish.app.playo.utils.Utilities;
 
 import java.util.List;
@@ -60,16 +61,23 @@ public class ResultFragment extends BaseCallbackFragment<ResultViewModel, IHomeA
                 if(resultData!=null){
                     List<Hit> hits = resultData.getHits();
                     if(!Utilities.isNullOrEmpty(hits)){
+                        mFragmentResultBinding.recyclerView.setVisibility(View.VISIBLE);
                         getViewModel().setPage(resultData.getPage());
                         resultAdapter.addResult(hits);
+                    }else {
+                        mFragmentResultBinding.recyclerView.setVisibility(View.GONE);
+                        mFragmentResultBinding.textNoData.setVisibility(View.VISIBLE);
                     }
+                }else {
+                    mFragmentResultBinding.textNoData.setVisibility(View.VISIBLE);
                 }
+                mFragmentResultBinding.progressBar.setVisibility(View.GONE);
             });
         }
     }
 
     private void initRecycler() {
-        resultAdapter = new ResultAdapter((ResultAdapter.OnListItemClicked) this);
+        resultAdapter = new ResultAdapter(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mFragmentResultBinding.recyclerView.setLayoutManager(linearLayoutManager);
         mFragmentResultBinding.recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
@@ -79,16 +87,24 @@ public class ResultFragment extends BaseCallbackFragment<ResultViewModel, IHomeA
 
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view, int lastVisibleItem){
-                int number = getViewModel().getPage()+1;
-                getViewModel().getSearchResult(getViewModel().getQuery(),number).observe(getViewLifecycleOwner(), resultData -> {
-                    if(resultData!=null){
-                        List<Hit> hits = resultData.getHits();
-                        if(!Utilities.isNullOrEmpty(hits)){
-                            getViewModel().setPage(resultData.getPage());
-                            resultAdapter.addNewResult(hits);
-                        }
+                Context context = getContext();
+                if(context!=null){
+                    if(Utilities.checkInternetConnection(context)){
+                        int number = getViewModel().getPage()+1;
+                        mFragmentResultBinding.progressBar.setVisibility(View.VISIBLE);
+                        getViewModel().getSearchResult(getViewModel().getQuery(),number).observe(getViewLifecycleOwner(), resultData -> {
+                            if(resultData!=null){
+                                List<Hit> hits = resultData.getHits();
+                                if(!Utilities.isNullOrEmpty(hits)) {
+                                    getViewModel().setPage(resultData.getPage());
+                                    resultAdapter.addNewResult(hits);
+                                }
+                            }
+                            mFragmentResultBinding.progressBar.setVisibility(View.GONE);
+                        });
                     }
-                });
+                }
+
             }
         });
 

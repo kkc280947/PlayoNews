@@ -1,4 +1,4 @@
-package com.krish.app.playo.features.web;
+package com.krish.app.playo.utils;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;

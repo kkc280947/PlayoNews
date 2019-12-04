@@ -20,6 +20,8 @@
                 android:id="@+id/edit_text_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:inputType="textCapSentences"
                 android:background="@android:color/transparent"
                 android:drawableStart="@android:drawable/ic_menu_search"
                 android:drawablePadding="@dimen/dp_8"
@@ -27,7 +29,7 @@
                 android:padding="@dimen/dp_16" />
         </com.google.android.material.card.MaterialCardView>
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/text_button_show_results"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

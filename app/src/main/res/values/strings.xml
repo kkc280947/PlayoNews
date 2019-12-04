@@ -2,4 +2,5 @@
     <string name="app_name">Playo News</string>
     <string name="search">Enter category to search</string>
     <string name="show_results">Show results</string>
+    <string name="no_data_found">No data found</string>
 </resources>

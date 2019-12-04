@@ -63,10 +63,11 @@ public class WebFragment extends BaseFragment{
         Bundle bundle = getArguments();
         if(bundle!=null){
             String url = bundle.getString(ARG_URL);
-//            if(!url.contains("https://")){
-//                url = url.replace("http","https");
-//            }
+            if(!url.contains("https://")){
+                url = url.replace("http","https");
+            }
             fragmentWebBinding.webView.loadUrl(url);
+            fragmentWebBinding.textTitle.setText(bundle.getString(ARG_TITLE));
         }
 
     }

@@ -1,7 +1,6 @@
 package com.krish.app.playo.features.result;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -65,7 +64,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
 
         public void bindView(Hit hit) {
             binding.textTitle.setText(hit.getTitle());
-            binding.textAuthor.setText(hit.getAuthor());
+            binding.textAuthor.setText(String.format("Author: %s", hit.getAuthor()));
         }
     }
 
