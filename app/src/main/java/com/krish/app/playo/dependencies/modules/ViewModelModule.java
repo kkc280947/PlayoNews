@@ -3,6 +3,7 @@ package com.krish.app.playo.dependencies.modules;
 import androidx.lifecycle.ViewModel;
 
 import com.krish.app.playo.features.home.HomeViewModel;
+import com.krish.app.playo.features.result.ResultViewModel;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -30,4 +31,9 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(HomeViewModel.class)
     abstract ViewModel bindHomeViewModel(HomeViewModel homeViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ResultViewModel.class)
+    abstract ViewModel bindResultViewModel(ResultViewModel resultViewModel);
 }

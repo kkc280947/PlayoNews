@@ -26,6 +26,7 @@ public class NetworkModule {
 
     private final long CACHE_SIZE = 10L * 1024 * 1024;
     private final long REQUEST_TIMEOUT = 30L;
+    private static final String BASE_URL = "https://hn.algolia.com/api/v1/";
 
     @Singleton
     @Provides
@@ -44,7 +45,7 @@ public class NetworkModule {
         return new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
-                .baseUrl("https://api.medicinescomplete.io/api/v2/")
+                .baseUrl(BASE_URL)
                 .build();
     }
 

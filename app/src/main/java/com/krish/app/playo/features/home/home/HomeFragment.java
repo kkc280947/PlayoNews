@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.krish.app.playo.R;
 import com.krish.app.playo.databinding.FragmentHomeBinding;
@@ -32,6 +33,18 @@ public class HomeFragment extends BaseCallbackFragment<HomeViewModel, IHomeActiv
 
         initViewModel(HomeViewModel.class);
         initActivityCallback(IHomeActivityCallback.class);
+        initShowResults();
         return mFragmentHomeBinding.getRoot();
+    }
+
+    private void initShowResults() {
+        mFragmentHomeBinding.textButtonShowResults.setOnClickListener(v -> {
+            String  query = mFragmentHomeBinding.editTextSearch.getText().toString();
+            if(!query.isEmpty()){
+                getActivityCallback().moveToResults(query);
+            }else {
+                Toast.makeText(getContext(), "Please enter category to search", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

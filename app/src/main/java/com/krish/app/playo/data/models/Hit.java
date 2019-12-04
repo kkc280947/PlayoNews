@@ -1,19 +1,46 @@
 package com.krish.app.playo.data.models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 class Hit {
+    @SerializedName("created_at")
+    @Expose
     private String createdAt;
+    @SerializedName("title")
+    @Expose
     private String title;
+    @SerializedName("url")
+    @Expose
     private String url;
+    @SerializedName("author")
+    @Expose
     private String author;
+    @SerializedName("points")
+    @Expose
     private Integer points;
+    @SerializedName("story_text")
+    @Expose
     private Object storyText;
+    @SerializedName("comment_text")
+    @Expose
     private Object commentText;
+    @SerializedName("num_comments")
+    @Expose
     private Integer numComments;
+    @SerializedName("created_at_i")
+    @Expose
     private Integer createdAtI;
+    @SerializedName("relevancy_score")
+    @Expose
     private Integer relevancyScore;
+    @SerializedName("_tags")
+    @Expose
     private List<String> tags = null;
+    @SerializedName("objectID")
+    @Expose
     private String objectID;
 
     public String getCreatedAt() {
