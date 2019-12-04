@@ -6,6 +6,8 @@ import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,14 +44,16 @@ public class HomeFragment extends BaseCallbackFragment<HomeViewModel, IHomeActiv
 
     private void initShowResults() {
         mFragmentHomeBinding.textButtonShowResults.setOnClickListener(v -> {
-            String  query = mFragmentHomeBinding.editTextSearch.getText().toString();
-            if(!query.isEmpty()){
-                Context context = getContext();
-                if(context!=null){
-                    if(Utilities.checkInternetConnection(context)){
-                        getActivityCallback().moveToResults(query);
-                    }else {
-                        Toast.makeText(getContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+            if(!TextUtils.isEmpty(mFragmentHomeBinding.editTextSearch.getText())) {
+                String query = mFragmentHomeBinding.editTextSearch.getText().toString();
+                if (!query.isEmpty()) {
+                    Context context = getContext();
+                    if (context != null) {
+                        if (Utilities.checkInternetConnection(context)) {
+                            getActivityCallback().moveToResults(query);
+                        } else {
+                            Toast.makeText(getContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }else {
