@@ -11,16 +11,22 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 
 import com.krish.app.playo.R;
+import com.krish.app.playo.data.models.Hit;
 import com.krish.app.playo.data.models.ResultData;
 import com.krish.app.playo.databinding.FragmentResultBinding;
 import com.krish.app.playo.features.application.base.BaseCallbackFragment;
 import com.krish.app.playo.features.home.interfaces.IHomeActivityCallback;
+import com.krish.app.playo.utils.Utilities;
+
+import java.util.List;
 
 public class ResultFragment extends BaseCallbackFragment<ResultViewModel, IHomeActivityCallback> {
 
     public static final String ARG_QUERY= "arg_query";
 
     FragmentResultBinding mFragmentResultBinding;
+
+    private ResultAdapter resultAdapter;
 
     public static ResultFragment newInstance(String query) {
         ResultFragment fragment = new ResultFragment();
@@ -39,21 +45,28 @@ public class ResultFragment extends BaseCallbackFragment<ResultViewModel, IHomeA
         getAppComponent().inject(this);
         initViewModel(ResultViewModel.class);
         initActivityCallback(IHomeActivityCallback.class);
-        Bundle bundle = getArguments();
+        initRecycler();
+        observerResults();
+        return mFragmentResultBinding.getRoot();
+    }
 
+    private void observerResults() {
+        Bundle bundle = getArguments();
         if(bundle!=null){
             String query = bundle.getString(ARG_QUERY);
-            getViewModel().getSearchResult(query).observe(getViewLifecycleOwner(), new Observer<ResultData>() {
-                @Override
-                public void onChanged(ResultData resultData) {
-                    if(resultData!=null){
-
+            getViewModel().getSearchResult(query).observe(getViewLifecycleOwner(), resultData -> {
+                if(resultData!=null){
+                    List<Hit> hits = resultData.getHits();
+                    if(!Utilities.isNullOrEmpty(hits)){
+                        resultAdapter.addResult(hits);
                     }
                 }
             });
-
         }
+    }
 
-        return mFragmentResultBinding.getRoot();
+    private void initRecycler() {
+        resultAdapter = new ResultAdapter();
+        mFragmentResultBinding.recyclerView.setAdapter(resultAdapter);
     }
 }

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-class Hit {
+public class Hit {
     @SerializedName("created_at")
     @Expose
     private String createdAt;
