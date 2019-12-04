@@ -8,6 +8,7 @@ import com.krish.app.playo.features.application.base.BaseActivity;
 import com.krish.app.playo.features.home.home.HomeFragment;
 import com.krish.app.playo.features.home.interfaces.IHomeActivityCallback;
 import com.krish.app.playo.features.result.ResultFragment;
+import com.krish.app.playo.features.web.WebFragment;
 
 public class HomeActivity extends BaseActivity implements IHomeActivityCallback {
 
@@ -29,5 +30,11 @@ public class HomeActivity extends BaseActivity implements IHomeActivityCallback 
     @Override
     public void moveToResults(String query) {
         swapFragment(ResultFragment.newInstance(query), true, true);
+    }
+
+    @Override
+    public void moveToWebPage(String url, String title) {
+        swapFragment(WebFragment.newInstance(url,title), true, true);
+
     }
 }

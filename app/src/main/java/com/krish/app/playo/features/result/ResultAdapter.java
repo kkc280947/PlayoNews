@@ -1,6 +1,7 @@
 package com.krish.app.playo.features.result;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -17,7 +18,11 @@ import java.util.List;
 public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder> {
 
     private List<Hit> newsList = new ArrayList<>();
+    private OnListItemClicked onListItemClicked;
 
+    public ResultAdapter(OnListItemClicked onListItemClicked){
+        this.onListItemClicked = onListItemClicked;
+    }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -51,11 +56,20 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
         public ViewHolder(ItemNewsBinding itemNewsBinding) {
             super(itemNewsBinding.getRoot());
             this.binding = itemNewsBinding;
+            binding.cardRoot.setOnClickListener(v -> {
+                if(onListItemClicked!=null){
+                    onListItemClicked.openUrl(newsList.get(getAdapterPosition()).getUrl(),newsList.get(getAdapterPosition()).getTitle());
+                }
+            });
         }
 
         public void bindView(Hit hit) {
             binding.textTitle.setText(hit.getTitle());
             binding.textAuthor.setText(hit.getAuthor());
         }
+    }
+
+    public interface OnListItemClicked{
+        void openUrl(String url, String title);
     }
 }

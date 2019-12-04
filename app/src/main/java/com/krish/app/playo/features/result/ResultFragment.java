@@ -21,7 +21,7 @@ import com.krish.app.playo.utils.Utilities;
 
 import java.util.List;
 
-public class ResultFragment extends BaseCallbackFragment<ResultViewModel, IHomeActivityCallback> {
+public class ResultFragment extends BaseCallbackFragment<ResultViewModel, IHomeActivityCallback> implements ResultAdapter.OnListItemClicked {
 
     public static final String ARG_QUERY= "arg_query";
 
@@ -69,7 +69,7 @@ public class ResultFragment extends BaseCallbackFragment<ResultViewModel, IHomeA
     }
 
     private void initRecycler() {
-        resultAdapter = new ResultAdapter();
+        resultAdapter = new ResultAdapter((ResultAdapter.OnListItemClicked) this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mFragmentResultBinding.recyclerView.setLayoutManager(linearLayoutManager);
         mFragmentResultBinding.recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
@@ -93,5 +93,10 @@ public class ResultFragment extends BaseCallbackFragment<ResultViewModel, IHomeA
         });
 
         mFragmentResultBinding.recyclerView.setAdapter(resultAdapter);
+    }
+
+    @Override
+    public void openUrl(String url, String title) {
+        getActivityCallback().moveToWebPage(url,title);
     }
 }
