@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -83,6 +84,8 @@ public class ResultFragment extends BaseCallbackFragment<ResultViewModel, IHomeA
         resultAdapter = new ResultAdapter(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mFragmentResultBinding.recyclerView.setLayoutManager(linearLayoutManager);
+
+        //Pagination for news
         mFragmentResultBinding.recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view){
@@ -105,9 +108,10 @@ public class ResultFragment extends BaseCallbackFragment<ResultViewModel, IHomeA
                             }
                             mFragmentResultBinding.progressBar.setVisibility(View.GONE);
                         });
+                    }else {
+                        Toast.makeText(getContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 }
-
             }
         });
 

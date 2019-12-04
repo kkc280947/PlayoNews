@@ -49,11 +49,11 @@ public class HomeFragment extends BaseCallbackFragment<HomeViewModel, IHomeActiv
                     if(Utilities.checkInternetConnection(context)){
                         getActivityCallback().moveToResults(query);
                     }else {
-                        Toast.makeText(getContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 }
             }else {
-                Toast.makeText(getContext(), "Please enter category to search", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.add_any_category), Toast.LENGTH_SHORT).show();
             }
         });
     }
