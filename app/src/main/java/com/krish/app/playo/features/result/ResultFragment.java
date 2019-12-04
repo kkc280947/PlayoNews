@@ -8,14 +8,15 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.krish.app.playo.R;
 import com.krish.app.playo.data.models.Hit;
-import com.krish.app.playo.data.models.ResultData;
 import com.krish.app.playo.databinding.FragmentResultBinding;
 import com.krish.app.playo.features.application.base.BaseCallbackFragment;
 import com.krish.app.playo.features.home.interfaces.IHomeActivityCallback;
+import com.krish.app.playo.features.web.EndlessRecyclerViewScrollListener;
 import com.krish.app.playo.utils.Utilities;
 
 import java.util.List;
@@ -54,10 +55,12 @@ public class ResultFragment extends BaseCallbackFragment<ResultViewModel, IHomeA
         Bundle bundle = getArguments();
         if(bundle!=null){
             String query = bundle.getString(ARG_QUERY);
-            getViewModel().getSearchResult(query).observe(getViewLifecycleOwner(), resultData -> {
+            getViewModel().setQuery(query);
+            getViewModel().getSearchResult(query,0).observe(getViewLifecycleOwner(), resultData -> {
                 if(resultData!=null){
                     List<Hit> hits = resultData.getHits();
                     if(!Utilities.isNullOrEmpty(hits)){
+                        getViewModel().setPage(resultData.getPage());
                         resultAdapter.addResult(hits);
                     }
                 }
@@ -67,6 +70,28 @@ public class ResultFragment extends BaseCallbackFragment<ResultViewModel, IHomeA
 
     private void initRecycler() {
         resultAdapter = new ResultAdapter();
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        mFragmentResultBinding.recyclerView.setLayoutManager(linearLayoutManager);
+        mFragmentResultBinding.recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view){
+            }
+
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view, int lastVisibleItem){
+                int number = getViewModel().getPage()+1;
+                getViewModel().getSearchResult(getViewModel().getQuery(),number).observe(getViewLifecycleOwner(), resultData -> {
+                    if(resultData!=null){
+                        List<Hit> hits = resultData.getHits();
+                        if(!Utilities.isNullOrEmpty(hits)){
+                            getViewModel().setPage(resultData.getPage());
+                            resultAdapter.addNewResult(hits);
+                        }
+                    }
+                });
+            }
+        });
+
         mFragmentResultBinding.recyclerView.setAdapter(resultAdapter);
     }
 }

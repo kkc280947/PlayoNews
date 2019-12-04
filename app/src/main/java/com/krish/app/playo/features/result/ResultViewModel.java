@@ -18,18 +18,22 @@ public class ResultViewModel extends ViewModel {
     @Inject
     PlayoApi playoApi;
 
+    private String query;
+
+    private int page=0;
+
     @Inject
     public ResultViewModel(){
 
     }
 
-    public MutableLiveData<ResultData> getSearchResult(String query) {
+    public MutableLiveData<ResultData> getSearchResult(String query, int page) {
         MutableLiveData<ResultData> resultList = new MutableLiveData<>();
         new Thread(() -> {
 
             Response<ResultData> updateData;
             try {
-                updateData = playoApi.getSearchResults(query,0).execute();
+                updateData = playoApi.getSearchResults(query, page).execute();
                 if (updateData.isSuccessful()) {
                     resultList.postValue(updateData.body());
                     Timber.d("success in api");
@@ -42,5 +46,21 @@ public class ResultViewModel extends ViewModel {
             }
         }).start();
         return resultList;
+    }
+
+    public void setQuery(String query) {
+        this.query=query;
+    }
+
+    public String getQuery() {
+        return query;
+    }
+
+    public void setPage(int i) {
+        this.page = i;
+    }
+
+    public int getPage() {
+        return page;
     }
 }

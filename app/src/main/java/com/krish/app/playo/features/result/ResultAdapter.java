@@ -41,6 +41,11 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
+    public void addNewResult(List<Hit> hits) {
+        newsList.addAll(hits);
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ItemNewsBinding binding;
         public ViewHolder(ItemNewsBinding itemNewsBinding) {

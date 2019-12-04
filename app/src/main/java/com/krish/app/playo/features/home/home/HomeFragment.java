@@ -1,6 +1,8 @@
 package com.krish.app.playo.features.home.home;
 
 import androidx.databinding.DataBindingUtil;
+
+import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +16,7 @@ import com.krish.app.playo.databinding.FragmentHomeBinding;
 import com.krish.app.playo.features.application.base.BaseCallbackFragment;
 import com.krish.app.playo.features.home.HomeViewModel;
 import com.krish.app.playo.features.home.interfaces.IHomeActivityCallback;
+import com.krish.app.playo.utils.Utilities;
 
 public class HomeFragment extends BaseCallbackFragment<HomeViewModel, IHomeActivityCallback> {
 
@@ -41,7 +44,14 @@ public class HomeFragment extends BaseCallbackFragment<HomeViewModel, IHomeActiv
         mFragmentHomeBinding.textButtonShowResults.setOnClickListener(v -> {
             String  query = mFragmentHomeBinding.editTextSearch.getText().toString();
             if(!query.isEmpty()){
-                getActivityCallback().moveToResults(query);
+                Context context = getContext();
+                if(context!=null){
+                    if(Utilities.checkInternetConnection(context)){
+                        getActivityCallback().moveToResults(query);
+                    }else {
+                        Toast.makeText(getContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }else {
                 Toast.makeText(getContext(), "Please enter category to search", Toast.LENGTH_SHORT).show();
             }
